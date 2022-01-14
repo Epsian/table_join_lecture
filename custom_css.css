@@ -1,0 +1,57 @@
+/* Little tweaks by JNJoseph */
+
+/* font sizes */
+
+.colossal { font-size: 220% }
+.gargantuan { font-size: 190% }
+.huge { font-size: 160% }
+.large { font-size: 130% }
+.small { font-size: 70% }
+.tiny { font-size: 40% }
+.diminutive { font-size: 10% }
+
+/* image caption style */
+
+p.caption {
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* columns */
+
+.auto_2{
+  columns: 2 200px;         /* number of columns and width in pixels*/
+  -webkit-columns: 2 200px; /* chrome, safari */
+  -moz-columns: 2 200px;    /* firefox */
+}
+.auto_3 {
+  columns: 3 100px;
+  -webkit-columns: 3 100px;
+  -moz-columns: 3 100px;
+}
+.lcol_2{
+  float: left;
+  width: 50%;
+  text-align: left;
+}
+.rcol_2{
+  float: right;
+  width: 50%;
+  text-align: left;
+}
+.lcol_3{
+  float: left;
+  width: 33%;
+  text-align: left;
+}
+.rcol_3{
+  float: right;
+  width: 33%;
+  text-align: left;
+}
+.ccol_3{
+  display: inline-block;
+  width: 33%;
+  text-align: center;
+}
