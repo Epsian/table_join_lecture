@@ -74,6 +74,11 @@ swamp = duos[duos$dest == 2, -5]
 
 # clean up ####
 
+# reindex dataframes
+row.names(desert) = 1:nrow(desert)
+row.names(swamp) = 1:nrow(swamp)
+
+# clean old objects
 rm(duo1, duo2, duos)
 
 
