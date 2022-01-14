@@ -79,13 +79,13 @@ Our eventual goal is to join the two dataframes above, and have a single row for
 
 The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another. Presented in the figure below are two mini-dataframes similar to our example data, being merged in such a way.
 
-```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well using the cbind function"}
+```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well using the cbind function", echo = FALSE}
 knitr::include_graphics("./img/1_1_cbind.png")
 ```
 
 This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
 
-```{r, fig.cap = "`cbind` example 2", fig.alt = "Two dataframes with misaligned data"}
+```{r, fig.cap = "`cbind` example 2", fig.alt = "Two dataframes with misaligned data", echo = FALSE}
 knitr::include_graphics("./img/1_2_cbind.png")
 ```
 
@@ -97,13 +97,13 @@ knitr::include_graphics("./img/1_2_cbind.png")
 
 An *inner join* tries to join two sets of data using a common *key*, keeping only the data that exists in both of the original data sets. This is commonly illustrated using a venn diagram similar to the one below. Only the area highlighted with green will be included in the output.
 
-```{r, fig.cap = "Inner Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted with the text 'inner join'"}
+```{r, fig.cap = "Inner Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted with the text 'inner join'", echo = FALSE}
 knitr::include_graphics("./img/2_1_inner.png")
 ```
 
 In the context of our data, it might look something like the following if we use hometown as our key:
 
-```{r, fig.cap = "Inner Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match"}
+```{r, fig.cap = "Inner Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match", echo = FALSE}
 knitr::include_graphics("./img/2_2_inner.png")
 ```
 
@@ -113,13 +113,13 @@ We can see that when using an *inner join*, cases where **both** dataframes have
 
 An *Outer Join* is the opposite of an *inner join*. Rather than just looking for those rows which have a *key* in common, it will join every row, regardless of the *keys*, inserting blank values where there is no match. You can get a sense of this merge with the venn diagram below, where the green indicates good matches, while the orange indicates partial matches.
 
-```{r, fig.cap = "Outer Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted in green, while the edges are highlighted in orange"}
+```{r, fig.cap = "Outer Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted in green, while the edges are highlighted in orange", echo = FALSE}
 knitr::include_graphics("./img/3_1_outer.png")
 ```
 
 In the context of our data, an *outer join* may look something like the following, again using hometown as our key:
 
-```{r, fig.cap = "Outer Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs"}
+```{r, fig.cap = "Outer Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs", echo = FALSE}
 knitr::include_graphics("./img/3_2_outer.png")
 ```
 
@@ -129,13 +129,13 @@ In this example, we see that an *outer join* will keep all available cases, but 
 
 A *left join* allows you to pick one of the two dataframes you are joining and prioritize it. It essentially takes all of the cases in the dataframe on the 'left' side, and searches in 'right' dataframe to join what it can. Keeping with the venn diagram representations, it would look like the following:
 
-```{r, fig.cap = "Left Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. All of the data 1 circle is highlighted, but only the part od data 2 that intersects data 1 is highlighted"}
+```{r, fig.cap = "Left Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. All of the data 1 circle is highlighted, but only the part od data 2 that intersects data 1 is highlighted", echo = FALSE}
 knitr::include_graphics("./img/4_1_left.png")
 ```
 
 Using our example data, a *left join* would look like this:
 
-```{r, fig.cap = "Left Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, keeping all of the left dataframe data, and adding the right dataframe data when available"}
+```{r, fig.cap = "Left Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, keeping all of the left dataframe data, and adding the right dataframe data when available", echo = FALSE}
 knitr::include_graphics("./img/4_2_left.png")
 ```
 
