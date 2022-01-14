@@ -1,0 +1,168 @@
+---
+title: "Teaching Demonstration - Joining Tables"
+author: "Jared Joseph"
+date: "1/20/2022"
+output: 
+  html_document: 
+    css: custom_css.css
+    theme: united
+    fig_caption: yes
+---
+
+```{r setup, include=FALSE}
+# Set knitr options
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+
+# Load packages
+# No packages needed, but you will need knitr (part of R markdown)
+
+# Load in student survey csv
+.raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing",
+                       header = TRUE, stringsAsFactors = FALSE)
+
+# Use me if something goes wrong
+# .raw_survey = read.csv()
+
+# Let loose the data gremlins
+# Don't look at this file until after lecture! Here there be spoilers.
+source("./src/1_split_duos.R")
+```
+
+# Overview
+
+This R Markdown file will walk students through the process of 
+
+**Prerequisites**
+
+* A stable internet connection
+* A working installation of R and an IDE (Rstudio or Jupyter)
+* Working knowledge of R syntax and data structures 
+
+**Teaching Objectives**
+
+By the end of this lecture, students should be able to:
+
+* Remember the common functions used when joining dataframes in R
+* Understand the example data in its current format, and the shape of the desired outcome
+* Apply the provided code to the example problems
+* Analyze a new dataset and suggest courses of action for joining
+
+**Roadmap**
+
+1. 
+
+**Scenario**
+
+We want to end up with a single dataframe, that has one row for each duo pair, one column for each member, and one column for their hometown.
+
+# Exploring the Data
+
+Our individuals were cast off into to different locations (dataframes), named desert and swamp. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
+
+Starting with the desert:
+
+```{r}
+head(desert, 10)
+```
+
+And then the swamp:
+
+```{r}
+head(swamp, 10)
+```
+
+# Joining Data in the Abstract
+
+Our eventual goal is to join the two dataframes above, and have a single row for each duo pair, one column for each member, and one column for their hometown. How can we get there? Let's look at a few possibilities.
+
+## Join by row using `cbind`
+
+The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another. Presented in the figure below are two mini-dataframes similar to our example data, being merged in such a way.
+
+```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well using the cbind function"}
+knitr::include_graphics("./img/1_1_cbind.png")
+```
+
+This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
+
+```{r, fig.cap = "`cbind` example 2", fig.alt = "Two dataframes with misaligned data"}
+knitr::include_graphics("./img/1_2_cbind.png")
+```
+
+## Joins using `merge`
+
+`cbind` may work in some situations, but is very "brittle" -- or easy to break -- with any changes to the data. A more reliable method of merging makes use of a common *key* between two sources of data. The *key* can be anything, like a numerical ID or a string, but they must always be unique. Joins that use the key method will be familiar to anyone who has used SQL in the past, as they follow the same naming convention as in that language.
+
+### Inner Join
+
+An *inner join* tries to join two sets of data using a common *key*, keeping only the data that exists in both of the original data sets. This is commonly illustrated using a venn diagram similar to the one below. Only the area highlighted with green will be included in the output.
+
+```{r, fig.cap = "Inner Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted with the text 'inner join'"}
+knitr::include_graphics("./img/2_1_inner.png")
+```
+
+In the context of our data, it might look something like the following if we use hometown as our key:
+
+```{r, fig.cap = "Inner Join Example - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match"}
+knitr::include_graphics("./img/2_2_inner.png")
+```
+
+We can see that when using an *inner join*, cases where **both** dataframes have a single row with our key will be matched and joined into a single output dataframe. However, if there are rows in **either** data frame without a match, those rows will be dropped from our data.
+
+### Outer Join
+
+An *Outer Join* is the opposite of an *inner join*. Rather than just looking for those rows which have a *key* in common, it will join every row, regardless of the *keys*, inserting blank values where there is no match. You can get a sense of this merge with the venn diagram below, where the green indicates good matches, while the orange indicates partial matches.
+
+```{r, fig.cap = "Outer Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted in green, while the edges are highlighted in orange"}
+knitr::include_graphics("./img/3_1_outer.png")
+```
+
+In the context of our data, an *outer join* may look something like the following, again using hometown as our key:
+
+```{r, fig.cap = "Outer Join Example - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs"}
+knitr::include_graphics("./img/3_2_outer.png")
+```
+
+In this example, we see that an *outer join* will keep all available cases, but we introduce `NA` values into the resulting dataframe where no match could be made. This may or may not be an issue depending on what the next steps are.
+
+### Left Join
+
+A *left join* allows you to pick one of the two dataframes you are joining and prioritize it. It essentially takes all of the cases in the dataframe on the 'left' side, and searches in 'right' dataframe to join what it can. Keeping with the venn diagram representations, it would look like the following:
+
+```{r, fig.cap = "Left Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. All of the data 1 circle is highlighted, but only the part od data 2 that intersects data 1 is highlighted"}
+knitr::include_graphics("./img/4_1_left.png")
+```
+
+
+
+
+
+
+
+
+
+
+Joining on one variable,
+
+
+joining on multiple variables
+
+learning checks
+
+
+
+
+
+
+
+
+merge diagrams here
+
+# Mid-Class Break -------------------------------------
+
+pause and stretch, stop for questions
+
+# Real-World Application
+
+
+
