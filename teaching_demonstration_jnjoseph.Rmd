@@ -97,13 +97,13 @@ knitr::include_graphics("./img/1_2_cbind.png")
 
 An *inner join* tries to join two sets of data using a common *key*, keeping only the data that exists in both of the original data sets. This is commonly illustrated using a venn diagram similar to the one below. Only the area highlighted with green will be included in the output.
 
-```{r, fig.cap = "Inner Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted with the text 'inner join'"}
+```{r, fig.cap = "Inner Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted with the text 'inner join'"}
 knitr::include_graphics("./img/2_1_inner.png")
 ```
 
 In the context of our data, it might look something like the following if we use hometown as our key:
 
-```{r, fig.cap = "Inner Join Example - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match"}
+```{r, fig.cap = "Inner Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match"}
 knitr::include_graphics("./img/2_2_inner.png")
 ```
 
@@ -113,13 +113,13 @@ We can see that when using an *inner join*, cases where **both** dataframes have
 
 An *Outer Join* is the opposite of an *inner join*. Rather than just looking for those rows which have a *key* in common, it will join every row, regardless of the *keys*, inserting blank values where there is no match. You can get a sense of this merge with the venn diagram below, where the green indicates good matches, while the orange indicates partial matches.
 
-```{r, fig.cap = "Outer Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted in green, while the edges are highlighted in orange"}
+```{r, fig.cap = "Outer Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. The intersection of them is highlighted in green, while the edges are highlighted in orange"}
 knitr::include_graphics("./img/3_1_outer.png")
 ```
 
 In the context of our data, an *outer join* may look something like the following, again using hometown as our key:
 
-```{r, fig.cap = "Outer Join Example - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs"}
+```{r, fig.cap = "Outer Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs"}
 knitr::include_graphics("./img/3_2_outer.png")
 ```
 
@@ -129,9 +129,17 @@ In this example, we see that an *outer join* will keep all available cases, but 
 
 A *left join* allows you to pick one of the two dataframes you are joining and prioritize it. It essentially takes all of the cases in the dataframe on the 'left' side, and searches in 'right' dataframe to join what it can. Keeping with the venn diagram representations, it would look like the following:
 
-```{r, fig.cap = "Left Join Example - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. All of the data 1 circle is highlighted, but only the part od data 2 that intersects data 1 is highlighted"}
+```{r, fig.cap = "Left Join - Venn Diagram", fig.alt = "A venn diagram with circles labeled data 1 and data 2. All of the data 1 circle is highlighted, but only the part od data 2 that intersects data 1 is highlighted"}
 knitr::include_graphics("./img/4_1_left.png")
 ```
+
+Using our example data, a *left join* would look like this:
+
+```{r, fig.cap = "Left Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, keeping all of the left dataframe data, and adding the right dataframe data when available"}
+knitr::include_graphics("./img/4_2_left.png")
+```
+
+We can see that while all of the data from our 'left' side is preserved, unmatched data on the 'right' is discarded. You can also technically do a *right join*, which will do the same thing with sides reversed, but using *left join* and moving your more important data set to the left is more common.
 
 
 
