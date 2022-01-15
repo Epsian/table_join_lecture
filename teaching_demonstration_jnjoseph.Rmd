@@ -11,21 +11,10 @@ output:
 
 ```{r setup, include=FALSE}
 # Set knitr options
-knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, out.width = "70%", fig.align = "center")
 
 # Load packages
 # No packages needed, but you will need knitr (part of R markdown)
-
-# Load in student survey csv
-.raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing",
-                       header = TRUE, stringsAsFactors = FALSE)
-
-# Use me if something goes wrong
-# .raw_survey = read.csv()
-
-# Let loose the data gremlins
-# Don't look at this file until after lecture! Here there be spoilers.
-source("./src/1_split_duos.R")
 ```
 
 # Overview
@@ -42,7 +31,7 @@ This R Markdown file will walk students through the process of
 
 By the end of this lecture, students should be able to:
 
-* Remember the common functions used when joining dataframes in R
+* Remember common functions used when joining dataframes in R
 * Understand the example data in its current format, and the shape of the desired outcome
 * Apply the provided code to the example problems
 * Analyze a new dataset and suggest courses of action for joining
@@ -55,21 +44,57 @@ By the end of this lecture, students should be able to:
 
 We want to end up with a single dataframe, that has one row for each duo pair, one column for each member, and one column for their hometown.
 
+```{r, fig.cap="Desired Output Example", fig.alt="A dataframe with 5 columns titled member 1, member 1 color, member 2, member 2 color, and hometown", echo = FALSE}
+knitr::include_graphics("./img/0_1_output.png")
+```
+
+
+# Workspace Preparation
+
+Please make sure your working directory is set to the base directory of this project (where the `teaching_demonstration_jnjoseph.Rmd` file is). You can set this automatically if you are using R studio by opening the `teaching_demo_proj.Rproj` file. If you are not, please use the `setwd()` function.
+
+After your working directory is set, please run the following code to download our class data, and prepare it for the lesson.
+
+```{r}
+# Load in student survey csv
+.raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing", header = TRUE, stringsAsFactors = FALSE)
+
+# Use me if something goes wrong
+# .raw_survey = read.csv()
+
+# Let loose the data gremlins
+# Don't look at this file until after lecture! Here there be spoilers.
+source("./src/1_split_duos.R")
+```
+
+
 # Exploring the Data
 
-Our individuals were cast off into to different locations (dataframes), named desert and swamp. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
+Our duos were split, and individuals were cast off into to different locations (dataframes), named `desert` and `swamp`. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
 
-Starting with the desert:
+Starting with the `desert`:
 
 ```{r}
 head(desert, 10)
+str(desert)
 ```
 
-And then the swamp:
+And then the `swamp`:
 
 ```{r}
 head(swamp, 10)
+str(swamp)
 ```
+
+---
+
+**Checkpoint**
+
+1. What do you notice about these dataframes? Does anything surprise you?
+2. Considering our desired output, do you have any ideas regarding how we can join these dataframes?
+3. What, if any, manipulations do you think we will need to perform before we can try and merge the data?
+
+---
 
 # Joining Data in the Abstract
 
@@ -77,7 +102,7 @@ Our eventual goal is to join the two dataframes above, and have a single row for
 
 ## Join by row using `cbind`
 
-The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another. Presented in the figure below are two mini-dataframes similar to our example data, being merged in such a way.
+The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another using `cbind` or *column bind*. Presented in the figure below are two mini-dataframes, similar to our example data, being merged in such a way.
 
 ```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well using the cbind function", echo = FALSE}
 knitr::include_graphics("./img/1_1_cbind.png")
@@ -139,7 +164,37 @@ Using our example data, a *left join* would look like this:
 knitr::include_graphics("./img/4_2_left.png")
 ```
 
-We can see that while all of the data from our 'left' side is preserved, unmatched data on the 'right' is discarded. You can also technically do a *right join*, which will do the same thing with sides reversed, but using *left join* and moving your more important data set to the left is more common.
+We can see that while all of the data from our 'left' side is preserved, unmatched data on the 'right' is discarded. You can also technically do a *right join*, which will do the same thing with sides reversed, but moving your prioritized data set to the left is more common.
+
+---
+
+**Checkpoint**
+
+1. What is the difference between a *column bind* and a *key* based join?
+2. What is the difference between an *inner join*, *outer join*, and *left join*?
+
+---
+
+# Key Selection and Creation
+
+Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let's glance back at our `desert` and `swamp` dataframes to get an idea of what we're working with.
+
+```{r}
+head(desert, 10)
+head(swamp, 10)
+```
+
+In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the *key* based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.
+
+---
+
+**Checkpoint**
+
+1. What column do you think could serve as a key for us to join on?
+2. What if any manipulations will you need to do for the key to be usable?
+
+---
+
 
 
 
@@ -162,9 +217,6 @@ learning checks
 
 
 
-
-
-merge diagrams here
 
 # Mid-Class Break -------------------------------------
 
