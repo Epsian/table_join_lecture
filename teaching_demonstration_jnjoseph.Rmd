@@ -118,7 +118,11 @@ knitr::include_graphics("./img/1_1_cbind.png")
 Let's try it ourselves. Let's use `cbind` to merge the `e1_cbind` and `e2_cbind` dataframes together into a new `e3_cbind` dataframe. the `cbind` function takes an arbitrary number of dataframes as it's main arguments. We'll provide just our two here, but repeating one multiple times if you would like to see what happens.
 
 ```{r}
-e3_cbind = cbind(e1_cbind, e2_cbind, e2_cbind, e2_cbind)
+# cbind the dataframes
+e3_cbind = cbind(e1_cbind, e2_cbind)
+
+# preview output
+e3_cbind
 ```
 
 We can see out new `e3_cbind` dataframe was created as expected. This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
@@ -145,21 +149,17 @@ In the context of our data, it might look something like the following if we use
 knitr::include_graphics("./img/2_2_inner.png")
 ```
 
-Let's try it ourselves
+Let's try it ourselves. We can use the following code to do an *inner merge* using the `merge` function. The `merge` function in R requires two arguments, `x` and `y`, which are the dataframes we would like to merge. We will be using `e1_key` and `e2_key`, and asking merge to use `hometown` as the key to merge by. We'll assign our output to a new dataframe, `e3_inner`.
 
+```{r}
+# inner join using "hometown"
+e3_inner = merge(x = e1_key, y = e2_key, by = "hometown")
 
+# preview output
+e3_inner
+```
 
-
-
-
-
-
-
-
-
-
-
-We can see that when using an *inner join*, cases where **both** dataframes have a single row with our key will be matched and joined into a single output dataframe. However, if there are rows in **either** data frame without a match, those rows will be dropped from our data.
+Everything seems in order. We can see that when using an *inner join*, cases where **both** dataframes have a single row with our key will be matched and joined into a single output dataframe. However, if there are rows in **either** data frame without a match, those rows will be dropped from our data.
 
 ### Outer Join
 
@@ -175,7 +175,17 @@ In the context of our data, an *outer join* may look something like the followin
 knitr::include_graphics("./img/3_2_outer.png")
 ```
 
-In this example, we see that an *outer join* will keep all available cases, but we introduce `NA` values into the resulting dataframe where no match could be made. This may or may not be an issue depending on what the next steps are.
+Let's try it. The code for an *outer join* is similar to an *inner join*, with one addition. We will want to specify that `all = TRUE`, essentially saying we want everything included. let's assign our output to `e3_outer`.
+
+```{r}
+# inner join using "hometown"
+e3_outer = merge(x = e1_key, y = e2_key, by = "hometown", all = TRUE)
+
+# preview output
+e3_outer
+```
+
+In this example, we see that an *outer join* will keep all available cases, but we introduce `NA` values into the resulting dataframe where no match could be made. This may or may not be an issue depending on what your next steps are.
 
 ### Left Join
 
@@ -191,11 +201,27 @@ Using our example data, a *left join* would look like this:
 knitr::include_graphics("./img/4_2_left.png")
 ```
 
+The R code is similar, to the previous examples, but we specify that instead of `all = TRUE`, we just want `all.x = TRUE`. Recall that in the function call, `x` is the first dataframe, or the "left" one. We'll assign this output to `e3_left`.
+
+```{r}
+# inner join using "hometown"
+e3_left = merge(x = e1_key, y = e2_key, by = "hometown", all.x = TRUE)
+
+# preview output
+e3_left
+```
+
 We can see that while all of the data from our 'left' side is preserved, unmatched data on the 'right' is discarded. You can also technically do a *right join*, which will do the same thing with sides reversed, but moving your prioritized data set to the left is more common.
 
 ---
 
 **Checkpoint**
+
+Let's clean up our environment a bit using the following code:
+
+```{r}
+rm(e1_cbind, e2_cbind, e3_cbind, e1_key, e2_key, e3_inner, e3_outer, e3_left)
+```
 
 1. What is the difference between a *column bind* and a *key* based join?
 2. What is the difference between an *inner join*, *outer join*, and *left join*?
