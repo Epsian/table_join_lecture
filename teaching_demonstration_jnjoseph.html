@@ -209,8 +209,7 @@ Desired Output Example
 </div>
 <div id="workspace-preparation" class="section level1">
 <h1>Workspace Preparation</h1>
-<p>Please make sure your working directory is set to the base directory of this project (where the <code>teaching_demonstration_jnjoseph.Rmd</code> file is). You can set this automatically if you are using R studio by opening the <code>teaching_demo_proj.Rproj</code> file. If you are not, please use the <code>setwd()</code> function.</p>
-<p>After your working directory is set, please run the following code to download our class data, and prepare it for the lesson.</p>
+<p>Please run the following code to download our class data, and prepare it for the lesson.</p>
 <pre class="r"><code># Load in student survey csv
 .raw_survey = read.csv(&quot;https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&amp;usp=sharing&quot;, header = TRUE, stringsAsFactors = FALSE)
 
@@ -223,37 +222,37 @@ source(&quot;https://raw.githubusercontent.com/Epsian/table_join_lecture/main/sr
 <p>Our duos were split, and individuals were cast off into to different locations (dataframes), named <code>desert</code> and <code>swamp</code>. Let’s start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.</p>
 <p>Starting with the <code>desert</code>:</p>
 <pre class="r"><code>head(desert, 10)</code></pre>
-<pre><code>##           name  color      alter    hometown
-## 1       Shaggy  Green Scooby Doo  Coolsville
-## 2        Robin Yellow       &lt;NA&gt;      Gotham
-## 3         Link  Green      Zelda CASTLE TOWN
-## 4       Batman    Red       &lt;NA&gt;      GOTHAM
-## 5         Kiki    Red       &lt;NA&gt;      KORIKO
-## 6       Watson Indigo   Sherlock      London
-## 7        Zelda Violet       Link Castle_Town
-## 8 Data Gremlin  green       &lt;NA&gt;  London_(7)</code></pre>
+<pre><code>##          name  color  alter    hometown
+## 1        JiJi Indigo   &lt;NA&gt;      Koriko
+## 2      Watson Indigo   &lt;NA&gt;  London_(7)
+## 3        Kiki    Red   JiJi      KORIKO
+## 4      Batman    Red  Robin      GOTHAM
+## 5        Link  Green  Zelda CASTLE TOWN
+## 6       Robin Yellow   &lt;NA&gt;      Gotham
+## 7    Sherlock   Blue   &lt;NA&gt;      LONDON
+## 8       Zelda Violet   Link Castle_Town
+## 9  Scooby Doo Orange Shaggy  COOLSVILLE
+## 10     Shaggy  Green   &lt;NA&gt;  Coolsville</code></pre>
 <pre class="r"><code>str(desert)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    8 obs. of  4 variables:
-##  $ name    : chr  &quot;Shaggy&quot; &quot;Robin&quot; &quot;Link&quot; &quot;Batman&quot; ...
-##  $ color   : chr  &quot;Green&quot; &quot;Yellow&quot; &quot;Green&quot; &quot;Red&quot; ...
-##  $ alter   : chr  &quot;Scooby Doo&quot; NA &quot;Zelda&quot; NA ...
-##  $ hometown: chr  &quot;Coolsville&quot; &quot;Gotham&quot; &quot;CASTLE TOWN&quot; &quot;GOTHAM&quot; ...</code></pre>
+<pre><code>## &#39;data.frame&#39;:    10 obs. of  4 variables:
+##  $ name    : chr  &quot;JiJi&quot; &quot;Watson&quot; &quot;Kiki&quot; &quot;Batman&quot; ...
+##  $ color   : chr  &quot;Indigo&quot; &quot;Indigo&quot; &quot;Red&quot; &quot;Red&quot; ...
+##  $ alter   : chr  NA NA &quot;JiJi&quot; &quot;Robin&quot; ...
+##  $ hometown: chr  &quot;Koriko&quot; &quot;London_(7)&quot; &quot;KORIKO&quot; &quot;GOTHAM&quot; ...</code></pre>
 <p>And then the <code>swamp</code>:</p>
 <pre class="r"><code>head(swamp, 10)</code></pre>
-<pre><code>##              name  color  alter     hometown
-## 1            JiJi Indigo   &lt;NA&gt;       Koriko
-## 2      Scooby Doo Orange   &lt;NA&gt;   COOLSVILLE
-## 3          Watson Indigo   &lt;NA&gt;   London_(7)
-## 4 Lorelai Gilmore Orange   &lt;NA&gt; Stars_Hollow
-## 5    Rory Gilmore Yellow   &lt;NA&gt; STARS HOLLOW
-## 6        Sherlock   Blue   &lt;NA&gt;   LONDON (7)
-## 7        Sherlock   Blue Watson       LONDON</code></pre>
+<pre><code>##              name  color           alter     hometown
+## 1          Watson Indigo            &lt;NA&gt;       London
+## 2 Lorelai Gilmore Orange    Rory Gilmore Stars_Hollow
+## 3    Rory Gilmore Yellow Lorelai Gilmore STARS HOLLOW
+## 4        Sherlock   Blue            &lt;NA&gt;   LONDON (7)
+## 5    Data Gremlin  green            &lt;NA&gt;   LONDON (7)</code></pre>
 <pre class="r"><code>str(swamp)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    7 obs. of  4 variables:
-##  $ name    : chr  &quot;JiJi&quot; &quot;Scooby Doo&quot; &quot;Watson&quot; &quot;Lorelai Gilmore&quot; ...
-##  $ color   : chr  &quot;Indigo&quot; &quot;Orange&quot; &quot;Indigo&quot; &quot;Orange&quot; ...
-##  $ alter   : chr  NA NA NA NA ...
-##  $ hometown: chr  &quot;Koriko&quot; &quot;COOLSVILLE&quot; &quot;London_(7)&quot; &quot;Stars_Hollow&quot; ...</code></pre>
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  4 variables:
+##  $ name    : chr  &quot;Watson&quot; &quot;Lorelai Gilmore&quot; &quot;Rory Gilmore&quot; &quot;Sherlock&quot; ...
+##  $ color   : chr  &quot;Indigo&quot; &quot;Orange&quot; &quot;Yellow&quot; &quot;Blue&quot; ...
+##  $ alter   : chr  NA &quot;Rory Gilmore&quot; &quot;Lorelai Gilmore&quot; NA ...
+##  $ hometown: chr  &quot;London&quot; &quot;Stars_Hollow&quot; &quot;STARS HOLLOW&quot; &quot;LONDON (7)&quot; ...</code></pre>
 <hr />
 <p><strong>Checkpoint</strong></p>
 <ol style="list-style-type: decimal">
@@ -353,24 +352,24 @@ Left Join - Example Data
 <h1>Key Selection</h1>
 <p>Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let’s glance back at our <code>desert</code> and <code>swamp</code> dataframes to get an idea of what we’re working with.</p>
 <pre class="r"><code>head(desert, 10)</code></pre>
-<pre><code>##           name  color      alter    hometown
-## 1       Shaggy  Green Scooby Doo  Coolsville
-## 2        Robin Yellow       &lt;NA&gt;      Gotham
-## 3         Link  Green      Zelda CASTLE TOWN
-## 4       Batman    Red       &lt;NA&gt;      GOTHAM
-## 5         Kiki    Red       &lt;NA&gt;      KORIKO
-## 6       Watson Indigo   Sherlock      London
-## 7        Zelda Violet       Link Castle_Town
-## 8 Data Gremlin  green       &lt;NA&gt;  London_(7)</code></pre>
+<pre><code>##          name  color  alter    hometown
+## 1        JiJi Indigo   &lt;NA&gt;      Koriko
+## 2      Watson Indigo   &lt;NA&gt;  London_(7)
+## 3        Kiki    Red   JiJi      KORIKO
+## 4      Batman    Red  Robin      GOTHAM
+## 5        Link  Green  Zelda CASTLE TOWN
+## 6       Robin Yellow   &lt;NA&gt;      Gotham
+## 7    Sherlock   Blue   &lt;NA&gt;      LONDON
+## 8       Zelda Violet   Link Castle_Town
+## 9  Scooby Doo Orange Shaggy  COOLSVILLE
+## 10     Shaggy  Green   &lt;NA&gt;  Coolsville</code></pre>
 <pre class="r"><code>head(swamp, 10)</code></pre>
-<pre><code>##              name  color  alter     hometown
-## 1            JiJi Indigo   &lt;NA&gt;       Koriko
-## 2      Scooby Doo Orange   &lt;NA&gt;   COOLSVILLE
-## 3          Watson Indigo   &lt;NA&gt;   London_(7)
-## 4 Lorelai Gilmore Orange   &lt;NA&gt; Stars_Hollow
-## 5    Rory Gilmore Yellow   &lt;NA&gt; STARS HOLLOW
-## 6        Sherlock   Blue   &lt;NA&gt;   LONDON (7)
-## 7        Sherlock   Blue Watson       LONDON</code></pre>
+<pre><code>##              name  color           alter     hometown
+## 1          Watson Indigo            &lt;NA&gt;       London
+## 2 Lorelai Gilmore Orange    Rory Gilmore Stars_Hollow
+## 3    Rory Gilmore Yellow Lorelai Gilmore STARS HOLLOW
+## 4        Sherlock   Blue            &lt;NA&gt;   LONDON (7)
+## 5    Data Gremlin  green            &lt;NA&gt;   LONDON (7)</code></pre>
 <p>In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the <em>key</em> based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.</p>
 <hr />
 <p><strong>Checkpoint</strong></p>
@@ -379,9 +378,7 @@ Left Join - Example Data
 <li>What if any manipulations will you need to do for the key to be usable?</li>
 </ol>
 <hr />
-</div>
-<div id="spoiler-space" class="section level1">
-<h1>Spoiler Space</h1>
+<p><strong>Spoiler Space</strong></p>
 <p>Don’t scroll past here until you’ve answered the above questions!</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 </div>
@@ -396,15 +393,17 @@ Left Join - Example Data
 <pre class="r"><code>swamp$hometown = tolower(swamp$hometown)</code></pre>
 <p>Let’s pause to look at our work …</p>
 <pre class="r"><code>head(desert, 10)</code></pre>
-<pre><code>##           name  color      alter    hometown
-## 1       Shaggy  Green Scooby Doo  coolsville
-## 2        Robin Yellow       &lt;NA&gt;      gotham
-## 3         Link  Green      Zelda castle town
-## 4       Batman    Red       &lt;NA&gt;      gotham
-## 5         Kiki    Red       &lt;NA&gt;      koriko
-## 6       Watson Indigo   Sherlock      london
-## 7        Zelda Violet       Link castle_town
-## 8 Data Gremlin  green       &lt;NA&gt;  london_(7)</code></pre>
+<pre><code>##          name  color  alter    hometown
+## 1        JiJi Indigo   &lt;NA&gt;      koriko
+## 2      Watson Indigo   &lt;NA&gt;  london_(7)
+## 3        Kiki    Red   JiJi      koriko
+## 4      Batman    Red  Robin      gotham
+## 5        Link  Green  Zelda castle town
+## 6       Robin Yellow   &lt;NA&gt;      gotham
+## 7    Sherlock   Blue   &lt;NA&gt;      london
+## 8       Zelda Violet   Link castle_town
+## 9  Scooby Doo Orange Shaggy  coolsville
+## 10     Shaggy  Green   &lt;NA&gt;  coolsville</code></pre>
 <p>Looks good. Now let’s deal with the spacing. If you look at our dataframes and compare across them, you’ll notice some hometowns have underscores in them. This seems to only happen when there would be a space. We can use that rule to replace all the underscores with a space instead. To do this, we’ll use a <code>gsub</code> function, or “global substitution.” It will look over all of the strings, and globally replace a pattern we specify with a substitution. In this case, we want to replace all &quot;_&quot; with &quot; &quot;.</p>
 <pre class="r"><code># gsub(Pattern, replacement, X)
 # pattern is what we want to replace
@@ -415,24 +414,130 @@ desert$hometown = gsub(pattern = &quot;_&quot;, &quot; &quot;, desert$hometown)<
 <pre class="r"><code>swamp$hometown = gsub(pattern = &quot;_&quot;, &quot; &quot;, swamp$hometown)</code></pre>
 <p>Let’s check our work …</p>
 <pre class="r"><code>head(desert, 10)</code></pre>
-<pre><code>##           name  color      alter    hometown
-## 1       Shaggy  Green Scooby Doo  coolsville
-## 2        Robin Yellow       &lt;NA&gt;      gotham
-## 3         Link  Green      Zelda castle town
-## 4       Batman    Red       &lt;NA&gt;      gotham
-## 5         Kiki    Red       &lt;NA&gt;      koriko
-## 6       Watson Indigo   Sherlock      london
-## 7        Zelda Violet       Link castle town
-## 8 Data Gremlin  green       &lt;NA&gt;  london (7)</code></pre>
+<pre><code>##          name  color  alter    hometown
+## 1        JiJi Indigo   &lt;NA&gt;      koriko
+## 2      Watson Indigo   &lt;NA&gt;  london (7)
+## 3        Kiki    Red   JiJi      koriko
+## 4      Batman    Red  Robin      gotham
+## 5        Link  Green  Zelda castle town
+## 6       Robin Yellow   &lt;NA&gt;      gotham
+## 7    Sherlock   Blue   &lt;NA&gt;      london
+## 8       Zelda Violet   Link castle town
+## 9  Scooby Doo Orange Shaggy  coolsville
+## 10     Shaggy  Green   &lt;NA&gt;  coolsville</code></pre>
 <p>Looking good! It seems we have a consistent key. Now for the ultimate task of reuniting our duos.</p>
 </div>
 <div id="format-and-merge" class="section level1">
 <h1>Format and Merge</h1>
-<p>Unfortunately, our duos were not split evenly. Some duos both got sent to the same place, while others were sent to different places.</p>
+<p>Unfortunately, our duos were not split evenly. Some duos both got sent to the same place, while others were sent to different places. As with many data science problems, there are a number of ways to overcome this, and no “best” answer.</p>
+<hr />
+<p><strong>Checkpoint</strong></p>
+<ol style="list-style-type: decimal">
+<li>How would you prepare our dataframes for a clean merge, now that we have a good key?</li>
+</ol>
+<hr />
+<p><strong>Spoiler Space</strong></p>
+<p>Don’t scroll past here until you’ve answered the above questions!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p>I’ll walk you through one method, but stress that this is not an “optimal” answer, it is just one of many. For my solution, I will aggregate all of the individuals into one dataframe, and then split them so that each new dataframe has only one instance of each hometown.</p>
+<p>First, I’ll combine all my individuals. You can add on rows to a dataframe using <code>rbind</code> much the same way you can add on columns using <code>cbind</code> in R. However, <code>rbind</code> is typically less fraught, as rows are typically conceptualized as individual and independent of each other, unlike columns which typically show data about rows. <code>rbind</code> essentially stacks two dataframes on top of each other, or appends the rows of one dataframe to another.</p>
+<pre class="r"><code># combine all out individuals into one dataframe
+individuals = rbind(swamp, desert)</code></pre>
+<p>Now all of our individuals are in a single dataframe. Our next task is to split them evenly, so one member of each duo, by hometown, is in a separate dataframe. For this we can make use of the <code>duplicated</code> function. <code>duplicated</code> checks if a specific value has appeared already within a vector. For example, if you had a vector of <code>c(&quot;A&quot;, &quot;B&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;C&quot;)</code>, the second B and second C would be considered duplicated, and thus output <code>TRUE</code> while all other values would output <code>FALSE</code>.</p>
+<p>In our case, if we run duplicated over the <code>hometown</code> column for our individuals, and split the <code>TRUE</code> into one datafarme and <code>FALSE</code> into another, we should end up with two dataframes, each containing one individual from a hometown. Let’s give it a try. First, let’s see what it looks like when we run <code>duplicated</code>. We’ll assign it to our individuals dataframe so it is easier to see.</p>
+<pre class="r"><code># run duplicated over hometowns and assign as a new column in our individuals dataframe
+individuals$duplicated = duplicated(individuals$hometown)
+
+# show the dataframe
+individuals</code></pre>
+<pre><code>##               name  color           alter     hometown duplicated
+## 1           Watson Indigo            &lt;NA&gt;       london      FALSE
+## 2  Lorelai Gilmore Orange    Rory Gilmore stars hollow      FALSE
+## 3     Rory Gilmore Yellow Lorelai Gilmore stars hollow       TRUE
+## 4         Sherlock   Blue            &lt;NA&gt;   london (7)      FALSE
+## 5     Data Gremlin  green            &lt;NA&gt;   london (7)       TRUE
+## 6             JiJi Indigo            &lt;NA&gt;       koriko      FALSE
+## 7           Watson Indigo            &lt;NA&gt;   london (7)       TRUE
+## 8             Kiki    Red            JiJi       koriko       TRUE
+## 9           Batman    Red           Robin       gotham      FALSE
+## 10            Link  Green           Zelda  castle town      FALSE
+## 11           Robin Yellow            &lt;NA&gt;       gotham       TRUE
+## 12        Sherlock   Blue            &lt;NA&gt;       london       TRUE
+## 13           Zelda Violet            Link  castle town       TRUE
+## 14      Scooby Doo Orange          Shaggy   coolsville      FALSE
+## 15          Shaggy  Green            &lt;NA&gt;   coolsville       TRUE</code></pre>
+<p>Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! First let’s evenly split them:</p>
+<pre class="r"><code># assign to a new duo1 dataframe, the contents of dataframe &quot;individuals&quot;
+# SUCH THAT
+# the rows whose value in column `individuals$duplicated` is equal to TRUE
+# and give me all columns
+duo1 = individuals[individuals$duplicated == TRUE, ]
+
+# assign to a new duo1 dataframe, the contents of dataframe &quot;individuals&quot;
+# SUCH THAT
+# the rows whose value in column `individuals$duplicated` is equal to TRUE
+# and give me all columns
+duo2 = individuals[individuals$duplicated == FALSE, ]</code></pre>
+<p>Alright, now we have two dataframes, each containing one member of a duo. Time to finally merge them back together! We can do this using the <code>merge</code> function we learned about previously. Let’s try an <code>inner merge</code>.</p>
+<pre class="r"><code># assign to a new reunion dataframe
+# the result of a inner merge between dataframes `duo1` and `duo2`
+# using column &quot;hometown&quot; as the key
+reunion = merge(duo1, duo2, by = &quot;hometown&quot;)
+
+# show results
+reunion</code></pre>
+<pre><code>##       hometown       name.x color.x         alter.x duplicated.x
+## 1  castle town        Zelda  Violet            Link         TRUE
+## 2   coolsville       Shaggy   Green            &lt;NA&gt;         TRUE
+## 3       gotham        Robin  Yellow            &lt;NA&gt;         TRUE
+## 4       koriko         Kiki     Red            JiJi         TRUE
+## 5       london     Sherlock    Blue            &lt;NA&gt;         TRUE
+## 6   london (7) Data Gremlin   green            &lt;NA&gt;         TRUE
+## 7   london (7)       Watson  Indigo            &lt;NA&gt;         TRUE
+## 8 stars hollow Rory Gilmore  Yellow Lorelai Gilmore         TRUE
+##            name.y color.y      alter.y duplicated.y
+## 1            Link   Green        Zelda        FALSE
+## 2      Scooby Doo  Orange       Shaggy        FALSE
+## 3          Batman     Red        Robin        FALSE
+## 4            JiJi  Indigo         &lt;NA&gt;        FALSE
+## 5          Watson  Indigo         &lt;NA&gt;        FALSE
+## 6        Sherlock    Blue         &lt;NA&gt;        FALSE
+## 7        Sherlock    Blue         &lt;NA&gt;        FALSE
+## 8 Lorelai Gilmore  Orange Rory Gilmore        FALSE</code></pre>
+<p>A bit messy still, but we did it! Each duo has been reunited in one row. Now we can clean up the results a bit, and arrive at our desired outcome. You’ll notice some column names now have a “.x” or “.y” at the end. This is because in the origonal <code>duo</code> dataframes, the columns had the same name. Since two columns can’t have the same name once we join them in a single dataframe, the <code>merge</code> function add these suffixes to denote which column came from which dataframe. The columns from the first dataframe in the <code>merge</code> function always gets the “.x” ending, while the second gets the “.y” ending.</p>
+<pre class="r"><code># first let&#39;s keep only the columns we want
+# assign to new dataframe `outcome` the contents of `reunion`
+# SUCH THAT
+# all rows
+# and the columns are named 
+outcome = reunion[ , c(&quot;name.x&quot;, &quot;color.x&quot;, &quot;name.y&quot;, &quot;color.y&quot;, &quot;hometown&quot;)]</code></pre>
+<p>Lastly, we can rename our columns.</p>
+<pre class="r"><code># rename columns of dataframe `outcome`
+colnames(outcome) = c(&quot;mem_1&quot;, &quot;mem_1_color&quot;, &quot;mem_2&quot;, &quot;mem_2_color&quot;, &quot;hometown&quot;)
+
+# show results
+head(outcome, 10)</code></pre>
+<pre><code>##          mem_1 mem_1_color           mem_2 mem_2_color     hometown
+## 1        Zelda      Violet            Link       Green  castle town
+## 2       Shaggy       Green      Scooby Doo      Orange   coolsville
+## 3        Robin      Yellow          Batman         Red       gotham
+## 4         Kiki         Red            JiJi      Indigo       koriko
+## 5     Sherlock        Blue          Watson      Indigo       london
+## 6 Data Gremlin       green        Sherlock        Blue   london (7)
+## 7       Watson      Indigo        Sherlock        Blue   london (7)
+## 8 Rory Gilmore      Yellow Lorelai Gilmore      Orange stars hollow</code></pre>
+<hr />
 </div>
-<div id="mid-class-break--" class="section level1">
-<h1>Mid-Class Break ————————————-</h1>
-<p>pause and stretch, stop for questions</p>
+<div id="mid-class-break" class="section level1">
+<h1>Mid-Class Break</h1>
+<p>Time to stretch and take a break.</p>
+<hr />
+<p><strong>Checkpoint</strong></p>
+<ol style="list-style-type: decimal">
+<li>Is there anything from the above section you still have questions about?</li>
+<li>Now that we’ve gotten to the outcome, would you have tried anything differently?</li>
+</ol>
+<hr />
 </div>
 <div id="real-world-application" class="section level1">
 <h1>Real-World Application</h1>

@@ -60,7 +60,8 @@ duos = duos[sample(1:nrow(duos)), ]
 duos$alter = ifelse(runif(nrow(duos), 0, 1) < .4, NA, duos$alter)
 
 # introduce data gremlin
-duos = rbind(duos, c("Data Gremlin", "green", NA, sample(duos$hometown, 1)))
+# disabled for now
+# duos = rbind(duos, c("Data Gremlin", "green", NA, sample(duos$hometown, 1)))
 
 # Send to far off places ####
 
