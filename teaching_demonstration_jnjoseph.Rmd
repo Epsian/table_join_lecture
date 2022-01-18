@@ -434,7 +434,7 @@ head(outcome, 10)
 
 That was hopefully a fun spreadsheet-based adventure, and I'm glad it had a happy ending. But how can we use what we've learned in the real world? The inspiration for this lesson came from a task I needed to accomplish for a student organization I helped run, called [Hack 4 California](https://critical-data-analysis.org/). The lab would meet weekly to work on civic data projects for our community, from small projects like helping the campus food pantry with usage statistics, and to full-fledged examinations of government data regarding exposure to hazardous materials in prisons with collaborators at UCLA.
 
-To continue learning from the experience, my co-lead and I wanted to reach out to everyone who had participated, and ask them what they thought! However, we had an issue. Because of the pandemic, half of our data were in PDFs of excel sheets, and the other half were in zoom attendance logs. In total I had two PDFs, and 28 Zoom logs. You can see versions of these files with fake names below.
+To continue learning from the experience, my co-lead and I wanted to calculate attendance, and reach out to everyone who had participated to ask them what they thought! However, we had an issue. Because of the pandemic, half of our attendance data was in PDFs of excel sheets, and the other half was in zoom attendance logs. In total we had two PDFs, and 28 Zoom logs. You can see versions of these files with fake names below.
 
 ```{r, fig.cap = "PDF Attendance Data", fig.alt = "A PDF of a spreadsheet with dates as columns containing names", echo = FALSE, out.extra="style='border-style: solid;border-width: 5px;'"}
 knitr::include_graphics("./img/attentance_sheet_pdf.jpg")
@@ -444,13 +444,22 @@ knitr::include_graphics("./img/attentance_sheet_pdf.jpg")
 knitr::include_graphics("./img/attentance_sheet_zoom.jpg")
 ```
 
-The data formats are not ideal (Why PDFs of an excel sheet?), but such is the case with most projects. You can download simplified versions of these data to work with using the following code:
+The data formats are not ideal (Why PDFs of an excel sheet?), but such is the case with most projects. You can import versions of these dataframes to work with using the following code:
 
 ```{r}
-
+source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/3_real_examples.R")
 ```
 
+## Data Challenge
 
+We wanted to create a single dataframe that contained complete attendance data, so that we could see how many times each person attended. Using the skills you've learned in this lecture and the course so far, create a single dataframe which contains a row for each person, and columns containing their name, a count of how many times they attended, and their email if available.
+
+**Tips**
+
+1. Create a mock up of your desired output, work towards that goal.
+2. What information do you need to keep from the raw data?
+3. What do you think you can use to merge on? What obstacles are there to doing so?
+4. How will you need to format the data so you can merge? What are the rows and columns?
 
 
 
