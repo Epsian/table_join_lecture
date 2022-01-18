@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, out.width = "70%", fig.align
 
 # Overview
 
-This R Markdown file will walk students through the process of 
+This lesson will guide students through the process of merging two messy dataframes by a common key using `merge`. 
 
 **Prerequisites**
 
@@ -38,11 +38,18 @@ By the end of this lecture, students should be able to:
 
 **Roadmap**
 
-1. 
+1. Example introduction.
+2. Data exploration and problem formulation.
+3. Merge toolkit.
+4. Example problem.
+5. Break and reflection.
+6. Real-world application.
 
 **Scenario**
 
-We want to end up with a single dataframe, that has one row for each duo pair, one column for each member, and one column for their hometown.
+Our gathering of famous duos has been beset by data goblins, resulting in all of our duos being separated! They have gathered together in two locations (dataframes), the desert and the swamp. Every duo wants to find their way back home, and to reunite with their opposite. 
+
+Practically, we want to use the data provided to produce a single dataframe, that has one row for each duo pair, one column for each member, their associated color, and hometown. And example of our desired output can be seen here.
 
 ```{r, fig.cap="Desired Output Example", fig.alt="A dataframe with 5 columns titled member 1, member 1 color, member 2, member 2 color, and hometown", echo = FALSE}
 knitr::include_graphics("./img/0_1_output.png")
@@ -51,22 +58,16 @@ knitr::include_graphics("./img/0_1_output.png")
 
 # Workspace Preparation
 
-Please make sure your working directory is set to the base directory of this project (where the `teaching_demonstration_jnjoseph.Rmd` file is). You can set this automatically if you are using R studio by opening the `teaching_demo_proj.Rproj` file. If you are not, please use the `setwd()` function.
-
-After your working directory is set, please run the following code to download our class data, and prepare it for the lesson.
+Please run the following code to download our class data, and prepare it for the lesson.
 
 ```{r}
 # Load in student survey csv
 .raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing", header = TRUE, stringsAsFactors = FALSE)
 
-# Use me if something goes wrong
-# .raw_survey = read.csv()
-
 # Let loose the data gremlins
 # Don't look at this file until after lecture! Here there be spoilers.
-source("./src/1_split_duos.R")
+source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/1_split_duos.R")
 ```
-
 
 # Exploring the Data
 
@@ -100,6 +101,12 @@ str(swamp)
 
 Our eventual goal is to join the two dataframes above, and have a single row for each duo pair, one column for each member, and one column for their hometown. How can we get there? Let's look at a few possibilities.
 
+First, run this code to generate a few example dataframes for merging:
+
+```{r}
+source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/2_merge_examples.R")
+```
+
 ## Join by row using `cbind`
 
 The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another using `cbind` or *column bind*. Presented in the figure below are two mini-dataframes, similar to our example data, being merged in such a way.
@@ -108,7 +115,13 @@ The simplest way to join two dataframes is to just attach the columns of one dat
 knitr::include_graphics("./img/1_1_cbind.png")
 ```
 
-This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
+Let's try it ourselves. Let's use `cbind` to merge the `e1_cbind` and `e2_cbind` dataframes together into a new `e3_cbind` dataframe. the `cbind` function takes an arbitrary number of dataframes as it's main arguments. We'll provide just our two here, but repeating one multiple times if you would like to see what happens.
+
+```{r}
+e3_cbind = cbind(e1_cbind, e2_cbind, e2_cbind, e2_cbind)
+```
+
+We can see out new `e3_cbind` dataframe was created as expected. This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
 
 ```{r, fig.cap = "`cbind` example 2", fig.alt = "Two dataframes with misaligned data", echo = FALSE}
 knitr::include_graphics("./img/1_2_cbind.png")
@@ -131,6 +144,20 @@ In the context of our data, it might look something like the following if we use
 ```{r, fig.cap = "Inner Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match", echo = FALSE}
 knitr::include_graphics("./img/2_2_inner.png")
 ```
+
+Let's try it ourselves
+
+
+
+
+
+
+
+
+
+
+
+
 
 We can see that when using an *inner join*, cases where **both** dataframes have a single row with our key will be matched and joined into a single output dataframe. However, if there are rows in **either** data frame without a match, those rows will be dropped from our data.
 
@@ -175,7 +202,7 @@ We can see that while all of the data from our 'left' side is preserved, unmatch
 
 ---
 
-# Key Selection and Creation
+# Key Selection
 
 Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let's glance back at our `desert` and `swamp` dataframes to get an idea of what we're working with.
 
@@ -195,34 +222,196 @@ In order to join these dataframes and reunite our duos, we need to choose some m
 
 ---
 
+**Spoiler Space**
+
+Don't scroll past here until you've answered the above questions!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+# Key Creation
+
+For our example, we will be using the hometown as out matching key; we ultimately want all of our duos to get home! However, the data gremlins have made this task more difficult, as the hometowns have various noise in them that prevents us from using them as a key. We're going to have to repair the damage before we can reunite our duos.
+
+We need to make our hometowns exact between out duos to use them as a key. To do this, we will need to standardize the capitalization, and the space deliminators in the hometown column. Let's take care of the capitalization first.
+
+While we could spend time making sure all of our hometowns are properly capitalized, it isn't really necessary in this application; we just need them to match. An easy way to do that is to set everything to upper or lower case. Let's use lower case here, making use of the `tolower` function in R. It will convert any character vector into all lower case.
+
+First for the desert:
+
+```{r}
+desert$hometown = tolower(desert$hometown)
+```
+
+And then the swamp:
+
+```{r}
+swamp$hometown = tolower(swamp$hometown)
+```
+
+Let's pause to look at our work ...
+
+```{r}
+head(desert, 10)
+```
+
+Looks good. Now let's deal with the spacing. If you look at our dataframes and compare across them, you'll notice some hometowns have underscores in them. This seems to only happen when there would be a space. We can use that rule to replace all the underscores with a space instead. To do this, we'll use a `gsub` function, or "global substitution." It will look over all of the strings, and globally replace a pattern we specify with a substitution. In this case, we want to replace all "_" with " ".
+
+```{r}
+# gsub(Pattern, replacement, X)
+# pattern is what we want to replace
+# replacement is what we want to replace the pattern
+# X is the vector of character strings we want to run this replacement on
+desert$hometown = gsub(pattern = "_", replacement =  " ", x = desert$hometown)
+```
+
+And now the swamp:
+
+```{r}
+swamp$hometown = gsub(pattern = "_", replacement = " ", x = swamp$hometown)
+```
+
+Let's check our work ...
+
+```{r}
+head(desert, 10)
+```
+
+Looking good! It seems we have a consistent key. Now for the ultimate task of reuniting our duos.
+
+# Format and Merge
+
+Unfortunately, our duos were not split evenly. Some duos both got sent to the same place, while others were sent to different places. As with many data science problems, there are a number of ways to overcome this, and no "best" answer.
+
+---
+
+**Checkpoint**
+
+1. How would you prepare our dataframes for a clean merge, now that we have a good key?
+
+---
+
+**Spoiler Space**
+
+Don't scroll past here until you've answered the above questions!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+I'll walk you through one method, but stress that this is not an "optimal" answer, it is just one of many. For my solution, I will aggregate all of the individuals into one dataframe, and then split them so that each new dataframe has only one instance of each hometown.
+
+First, I'll combine all my individuals. You can add on rows to a dataframe using `rbind` much the same way you can add on columns using `cbind` in R. However, `rbind` is typically less fraught, as rows are typically conceptualized as individual and independent of each other, unlike columns which typically show data about rows. `rbind` essentially stacks two dataframes on top of each other, or appends the rows of one dataframe to another.
+
+```{r}
+# combine all out individuals into one dataframe
+individuals = rbind(swamp, desert)
+```
+
+Now all of our individuals are in a single dataframe. Our next task is to split them evenly, so one member of each duo, by hometown, is in a separate dataframe. For this we can make use of the `duplicated` function. `duplicated` checks if a specific value has appeared already within a vector. For example, if you had a vector of `c("A", "B", "B", "C", "D", "C")`, the second B and second C would be considered duplicated, and thus output `TRUE` while all other values would output `FALSE`.
+
+In our case, if we run duplicated over the `hometown` column for our individuals, and split the `TRUE` into one datafarme and `FALSE` into another, we should end up with two dataframes, each containing one individual from a hometown. Let's give it a try. First, let's see what it looks like when we run `duplicated`. We'll assign it to our individuals dataframe so it is easier to see.
+
+```{r}
+# run duplicated over hometowns and assign as a new column in our individuals dataframe
+individuals$duplicated = duplicated(individuals$hometown)
+
+# show the dataframe
+individuals
+```
+
+Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! First let's evenly split them:
 
 
+```{r}
+# assign to a new duo1 dataframe, the contents of dataframe "individuals"
+# SUCH THAT
+# the rows whose value in column `individuals$duplicated` is equal to TRUE
+# and give me all columns
+duo1 = individuals[individuals$duplicated == TRUE, ]
 
+# assign to a new duo1 dataframe, the contents of dataframe "individuals"
+# SUCH THAT
+# the rows whose value in column `individuals$duplicated` is equal to TRUE
+# and give me all columns
+duo2 = individuals[individuals$duplicated == FALSE, ]
+```
 
+Alright, now we have two dataframes, each containing one member of a duo. Time to finally merge them back together! We can do this using the `merge` function we learned about previously. Let's try an `inner merge`.
 
+```{r}
+# assign to a new reunion dataframe
+# the result of a inner merge between dataframes `duo1` and `duo2`
+# using column "hometown" as the key
+reunion = merge(duo1, duo2, by = "hometown")
 
+# show results
+reunion
+```
 
+A bit messy still, but we did it! Each duo has been reunited in one row. Now we can clean up the results a bit, and arrive at our desired outcome. You'll notice some column names now have a ".x" or ".y" at the end. This is because in the origonal `duo` dataframes, the columns had the same name. Since two columns can't have the same name once we join them in a single dataframe, the `merge` function add these suffixes to denote which column came from which dataframe. The columns from the first dataframe in the `merge` function always gets the ".x" ending, while the second gets the ".y" ending.
 
+```{r}
+# first let's keep only the columns we want
+# assign to new dataframe `outcome` the contents of `reunion`
+# SUCH THAT
+# all rows
+# and the columns are named 
+outcome = reunion[ , c("name.x", "color.x", "name.y", "color.y", "hometown")]
+```
 
+Lastly, we can rename our columns.
 
-Joining on one variable,
+```{r}
+# rename columns of dataframe `outcome`
+colnames(outcome) = c("mem_1", "mem_1_color", "mem_2", "mem_2_color", "hometown")
 
+# show results
+head(outcome, 10)
+```
 
-joining on multiple variables
+---
 
-learning checks
+# Mid-Class Break
 
+Time to stretch and take a break.
 
+---
 
+**Checkpoint**
 
+1. Is there anything from the above section you still have questions about?
+2. Now that we've gotten to the outcome, would you have tried anything differently?
 
-
-
-# Mid-Class Break -------------------------------------
-
-pause and stretch, stop for questions
+---
 
 # Real-World Application
 
+That was hopefully a fun spreadsheet-based adventure, and I'm glad it had a happy ending. But how can we use what we've learned in the real world? The inspiration for this lesson came from a task I needed to accomplish for a student organization I helped run, called [Hack 4 California](https://critical-data-analysis.org/). The lab would meet weekly to work on civic data projects for our community, from small projects like helping the campus food pantry with usage statistics, and to full-fledged examinations of government data regarding exposure to hazardous materials in prisons with collaborators at UCLA.
 
-
+To continue learning from the experience, my co-lead and I wanted to reach out to everyone who had participated, and ask them what they thought! However, we had an issue. Because of the pandemic, half of our data were in PDF tables, and the other half were in zoom attendance logs; not ideal.
