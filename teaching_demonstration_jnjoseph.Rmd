@@ -388,7 +388,7 @@ duo1 = individuals[individuals$duplicated == TRUE, ]
 duo2 = individuals[individuals$duplicated == FALSE, ]
 ```
 
-Alright, now we have two dataframes, each containing one member of a duo. Time to finally merge them back together! We can do this using the `merge` function we learned about previously. Let's try an `inner merge`.
+Alright, now we have two dataframes, each containing one member of a duo. Time to finally merge them back together! We can do this using the `merge` function we learned about previously. Let's try an *inner merge*.
 
 ```{r}
 # assign to a new reunion dataframe
@@ -400,7 +400,7 @@ reunion = merge(duo1, duo2, by = "hometown")
 reunion
 ```
 
-A bit messy still, but we did it! Each duo has been reunited in one row. Now we can clean up the results a bit, and arrive at our desired outcome. You'll notice some column names now have a ".x" or ".y" at the end. This is because in the origonal `duo` dataframes, the columns had the same name. Since two columns can't have the same name once we join them in a single dataframe, the `merge` function add these suffixes to denote which column came from which dataframe. The columns from the first dataframe in the `merge` function always gets the ".x" ending, while the second gets the ".y" ending.
+A bit messy still, but we did it! Each duo has been reunited in one row. Now we can clean up the results a bit, and arrive at our desired outcome. You'll notice some column names now have a ".x" or ".y" at the end. This is because in the original `duo` dataframes, the columns had the same name. Since two columns can't have the same name once we join them in a single dataframe, the `merge` function add these suffixes to denote which column came from which dataframe. The columns from the first dataframe in the `merge` function always gets the ".x" ending, while the second gets the ".y" ending.
 
 ```{r}
 # first let's keep only the columns we want
@@ -423,12 +423,6 @@ head(outcome, 10)
 
 ---
 
-# Mid-Class Break
-
-Time to stretch and take a break.
-
----
-
 **Checkpoint**
 
 1. Is there anything from the above section you still have questions about?
@@ -440,4 +434,23 @@ Time to stretch and take a break.
 
 That was hopefully a fun spreadsheet-based adventure, and I'm glad it had a happy ending. But how can we use what we've learned in the real world? The inspiration for this lesson came from a task I needed to accomplish for a student organization I helped run, called [Hack 4 California](https://critical-data-analysis.org/). The lab would meet weekly to work on civic data projects for our community, from small projects like helping the campus food pantry with usage statistics, and to full-fledged examinations of government data regarding exposure to hazardous materials in prisons with collaborators at UCLA.
 
-To continue learning from the experience, my co-lead and I wanted to reach out to everyone who had participated, and ask them what they thought! However, we had an issue. Because of the pandemic, half of our data were in PDF tables, and the other half were in zoom attendance logs; not ideal.
+To continue learning from the experience, my co-lead and I wanted to reach out to everyone who had participated, and ask them what they thought! However, we had an issue. Because of the pandemic, half of our data were in PDFs of excel sheets, and the other half were in zoom attendance logs. In total I had two PDFs, and 28 Zoom logs. You can see versions of these files with fake names below.
+
+```{r, fig.cap = "PDF Attendance Data", fig.alt = "A PDF of a spreadsheet with dates as columns containing names", echo = FALSE, out.extra="style='border-style: solid;border-width: 5px;'"}
+knitr::include_graphics("./img/attentance_sheet_pdf.jpg")
+```
+
+```{r, fig.cap = "Zoom Log Attendance Data", fig.alt = "A spreadsheet log of of zoom attendance with names, times, and metadata", echo = FALSE}
+knitr::include_graphics("./img/attentance_sheet_zoom.jpg")
+```
+
+The data formats are not ideal (Why PDFs of an excel sheet?), but such is the case with most projects. You can download simplified versions of these data to work with using the following code:
+
+```{r}
+
+```
+
+
+
+
+
