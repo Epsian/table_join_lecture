@@ -6,8 +6,7 @@
 
 # in/out ####
 
-.out_loc_1 = "./data/duo1.csv"
-.out_loc_2 = "./data/duo2.csv"
+# nothing saved or loaded from disk
 
 # Data formatting ####
 
@@ -48,16 +47,21 @@ duo1$hometown = toupper(duo1$hometown)
 # swap spaces with underscores in duo2
 duo2$hometown = gsub(" ", "_", duo2$hometown)
 
-# re-merge ####
-
-# merge the duos as individuals
-duos = rbind(duo1, duo2)
-
-# randomize order
-duos = duos[sample(1:nrow(duos)), ]
+# unbalance dataframes
+duo2 = rbind(duo2, duo1[1:floor(nrow(duo1)*.2), ])
+duo1 = duo1[-c(1:floor(nrow(duo1)*.2)), ]
 
 # memory loss
-duos$alter = ifelse(runif(nrow(duos), 0, 1) < .4, NA, duos$alter)
+duo1$alter = ifelse(1:nrow(duo1)%%2 == 0, NA, duo1$alter)
+duo2$alter = ifelse(1:nrow(duo2)%%2 == 0, NA, duo2$alter)
+
+# randomize order
+duo1 = duo1[sample(1:nrow(duo1)), ]
+duo2 = duo2[sample(1:nrow(duo2)), ]
+
+# reindex dataframes
+row.names(duo1) = 1:nrow(duo1)
+row.names(duo2) = 1:nrow(duo2)
 
 # introduce data gremlin
 # disabled for now
@@ -65,21 +69,12 @@ duos$alter = ifelse(runif(nrow(duos), 0, 1) < .4, NA, duos$alter)
 
 # Send to far off places ####
 
-# pick a random desitnation (dataframe) for individuals
-duos$dest = sample(c(1,2), nrow(duos), TRUE)
-
-# split based on destination
-
-desert = duos[duos$dest == 1, -5]
-swamp = duos[duos$dest == 2, -5]
+california = duo1
+massachusetts = duo2
 
 # clean up ####
 
-# reindex dataframes
-row.names(desert) = 1:nrow(desert)
-row.names(swamp) = 1:nrow(swamp)
-
 # clean old objects
-rm(duo1, duo2, duos)
+rm(duo1, duo2)
 
 
