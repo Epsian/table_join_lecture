@@ -155,23 +155,20 @@ If you were coding along, you can clean up our environment using the following c
 rm(outcome, upper_rbind_df, lower_rbind_df, left_cbind_df, right_cbind_df, left_merge_df, right_merge_df)
 ```
 
+---
 
+<div style="background:#addfad; padding: 5px;">
 
+**Checkpoint**
 
+Please use the Zoom reacts to respond. Green check is TRUE, red X is FALSE.
 
+1. `cbind` sorts rows before combining dataframes.
+2. An *outer join* of two dataframes of equal rows will produce an outcome with the same number of rows.
 
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
+---
 
 # Data Merge Practice
 
@@ -194,31 +191,13 @@ Please run the following code to download our class data, and prepare it for the
 source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/1_split_duos.R")
 ```
 
----
-
-<div style="background:#addfad; padding: 5px;">
-
-**Checkpoint**
-
-Please use the Zoom reacts to respond. Green check is TRUE, red X is FALSE.
-
-1. `cbind` sorts rows before combining dataframes.
-2. An *outer join* of two dataframes of equal rows will produce an outcome with the same number of rows.
-
-</div>
-
----
-
-
-
-
-
-
 ## The Scenario
 
-Our gathering of famous duos has been beset by data gremlins, resulting in all of our duos being separated! They have gathered together in two locations (dataframes), `california` and `massachusetts`. Every duo wants to find their way back home, and to reunite with their opposite. 
+After sending out invitations via our Google form, all of our favorite duos from history and fiction have agreed to come to lecture. On their way, the group was beset by data gremlins, resulting in all of our duos being separated! Not only that, but the gremlins have introduced noise and mess into our data.
 
-Our duos were split, and individuals were cast off into to different locations (dataframes), named `california` and `massachusetts`. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
+The individuals from our duos have regathered themselves in two locations (dataframes), `california` and `massachusetts`. Every duo wants to find their way back home, and to reunite with their opposite. 
+
+Let's start by looking at the dataframes where the individuals from our duos ended up. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
 
 Starting with the `california`:
 
@@ -234,62 +213,40 @@ head(massachusetts, 10)
 str(massachusetts)
 ```
 
----
-
-**Checkpoint**
-
-1. What do you notice about these dataframes? Does anything surprise you?
-2. Considering our desired output, do you have any ideas regarding how we can join these dataframes?
-3. What, if any, manipulations do you think we will need to perform before we can try and merge the data?
-
----
-
-
-Practically, we want to use the data provided to produce a single dataframe, that has one row for each duo pair, one column for each member, their associated color, and hometown. And example of our desired output can be seen here.
+We want, by the end of this lesson, to reunite our duos. To do so, we will want to create a new dataframe, where each row has a single duo pair: one column for each member, their associated color, and hometown. And example of our desired output can be seen here.
 
 ```{r, fig.cap="Desired Output Example", fig.alt="A dataframe with 5 columns titled member 1, member 1 color, member 2, member 2 color, and hometown", echo = FALSE}
 knitr::include_graphics("./img/0_1_output.png")
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## Key Selection
-
-Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let's glance back at our `california` and `massachusetts` dataframes to get an idea of what we're working with.
-
-```{r}
-head(california, 10)
-head(massachusetts, 10)
-```
-
-In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the *key* based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.
-
 ---
+
+<div style="background:#addfad; padding: 5px;">
 
 **Checkpoint**
 
-1. What column do you think could serve as a key for us to join on?
-2. What if any manipulations will you need to do for the key to be usable?
+1. Considering our desired output, do you have any thoughts regarding how we can join these dataframes?
+2. What, if any, manipulations do you think we will need to perform before we can try and merge the data?
+
+</div>
+
+---
+
+## Key Creation
+
+In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the *key* based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.
+
+For our example, we will be using the "hometown" as our matching *key*; we ultimately want all of our duos to get home! However, the data gremlins have made this task more difficult, as the hometowns have various noise in them that prevents us from using them as a *key*. We're going to have to repair the damage before we can reunite our duos.
+
+---
+
+<div style="background:#addfad; padding: 5px;">
+
+**Checkpoint**
+
+1. What do we need to do to make "hometown" a usable *key* to match on?
+
+</div>
 
 ---
 
@@ -313,23 +270,12 @@ Don't scroll past here until you've answered the above questions!
 <br>
 <br>
 
-## Key Creation
-
-For our example, we will be using the hometown as out matching key; we ultimately want all of our duos to get home! However, the data gremlins have made this task more difficult, as the hometowns have various noise in them that prevents us from using them as a key. We're going to have to repair the damage before we can reunite our duos.
-
-We need to make our hometowns exact between out duos to use them as a key. To do this, we will need to standardize the capitalization, and the space deliminators in the hometown column. Let's take care of the capitalization first.
+To use "hometown" as a *key*, we will need to standardize the capitalization and the space deliminators. Let's take care of the capitalization first.
 
 While we could spend time making sure all of our hometowns are properly capitalized, it isn't really necessary in this application; we just need them to match. An easy way to do that is to set everything to upper or lower case. Let's use lower case here, making use of the `tolower` function in R. It will convert any character vector into all lower case.
 
-First for the california:
-
 ```{r}
 california$hometown = tolower(california$hometown)
-```
-
-And then the massachusetts:
-
-```{r}
 massachusetts$hometown = tolower(massachusetts$hometown)
 ```
 
@@ -347,11 +293,6 @@ Looks good. Now let's deal with the spacing. If you look at our dataframes and c
 # replacement is what we want to replace the pattern
 # X is the vector of character strings we want to run this replacement on
 california$hometown = gsub(pattern = "_", replacement =  " ", x = california$hometown)
-```
-
-And now the massachusetts:
-
-```{r}
 massachusetts$hometown = gsub(pattern = "_", replacement = " ", x = massachusetts$hometown)
 ```
 
@@ -369,9 +310,13 @@ Unfortunately, our duos were not split evenly. Some duos both got sent to the sa
 
 ---
 
+<div style="background:#addfad; padding: 5px;">
+
 **Checkpoint**
 
 1. How would you prepare our dataframes for a clean merge, now that we have a good key?
+
+</div>
 
 ---
 
@@ -397,7 +342,7 @@ Don't scroll past here until you've answered the above questions!
 
 I'll walk you through one method, but stress that this is not an "optimal" answer, it is just one of many. For my solution, I will aggregate all of the individuals into one dataframe, and then split them so that each new dataframe has only one instance of each hometown.
 
-First, I'll combine all my individuals. You can add on rows to a dataframe using `rbind` much the same way you can add on columns using `cbind` in R. However, `rbind` is typically less fraught, as rows are typically conceptualized as individual and independent of each other, unlike columns which typically show data about rows. `rbind` essentially stacks two dataframes on top of each other, or appends the rows of one dataframe to another.
+First, I'll combine all my individuals using `rbind` from earlier.
 
 ```{r}
 # combine all out individuals into one dataframe
@@ -416,8 +361,11 @@ individuals$duplicated = duplicated(individuals$hometown)
 individuals
 ```
 
-Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! First let's evenly split them:
+Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! We can split them using the `duplicated` column we just made.
 
+```{r, fig.cap = "Split via `duplicated`", fig.alt = "Two dataframes being split based on the column 'duplicated'", echo = FALSE}
+knitr::include_graphics("./img/5_1_duplicated.png")
+```
 
 ```{r}
 # assign to a new duo1 dataframe, the contents of dataframe "individuals"
@@ -468,10 +416,14 @@ head(outcome, 10)
 
 ---
 
+<div style="background:#addfad; padding: 5px;">
+
 **Checkpoint**
 
 1. Is there anything from the above section you still have questions about?
 2. Now that we've gotten to the outcome, would you have tried anything differently?
+
+</div>
 
 ---
 
