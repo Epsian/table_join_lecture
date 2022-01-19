@@ -47,14 +47,19 @@ By the end of this lecture, students should be able to:
 
 **Scenario**
 
-Our gathering of famous duos has been beset by data goblins, resulting in all of our duos being separated! They have gathered together in two locations (dataframes), the desert and the swamp. Every duo wants to find their way back home, and to reunite with their opposite. 
+
+
+!!!
+
+
+
+Our gathering of famous duos has been beset by data goblins, resulting in all of our duos being separated! They have gathered together in two locations (dataframes), the `california` and `massachusetts`. Every duo wants to find their way back home, and to reunite with their opposite. 
 
 Practically, we want to use the data provided to produce a single dataframe, that has one row for each duo pair, one column for each member, their associated color, and hometown. And example of our desired output can be seen here.
 
 ```{r, fig.cap="Desired Output Example", fig.alt="A dataframe with 5 columns titled member 1, member 1 color, member 2, member 2 color, and hometown", echo = FALSE}
 knitr::include_graphics("./img/0_1_output.png")
 ```
-
 
 # Workspace Preparation
 
@@ -71,20 +76,20 @@ source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/1_s
 
 # Exploring the Data
 
-Our duos were split, and individuals were cast off into to different locations (dataframes), named `desert` and `swamp`. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
+Our duos were split, and individuals were cast off into to different locations (dataframes), named `california` and `massachusetts`. Let's start by looking at them. Each dataframe has 4 columns: the name of the individual, a color, the name of their alter (pairing), and their hometown.
 
-Starting with the `desert`:
+Starting with the `california`:
 
 ```{r}
-head(desert, 10)
-str(desert)
+head(california, 10)
+str(california)
 ```
 
-And then the `swamp`:
+And then the `massachusetts`:
 
 ```{r}
-head(swamp, 10)
-str(swamp)
+head(massachusetts, 10)
+str(massachusetts)
 ```
 
 ---
@@ -101,34 +106,40 @@ str(swamp)
 
 Our eventual goal is to join the two dataframes above, and have a single row for each duo pair, one column for each member, and one column for their hometown. How can we get there? Let's look at a few possibilities.
 
-First, run this code to generate a few example dataframes for merging:
+If you would like to test these dataframes within R yourself, you can run this code. The results will be identical to the figures.
 
 ```{r}
 source("https://raw.githubusercontent.com/Epsian/table_join_lecture/main/src/2_merge_examples.R")
 ```
 
-## Join by row using `cbind`
+## Join Vertically using `rbind`
 
-The simplest way to join two dataframes is to just attach the columns of one dataframe to the columns of another using `cbind` or *column bind*. Presented in the figure below are two mini-dataframes, similar to our example data, being merged in such a way.
+If you have two dataframes and want to combine them, you need to decide what direction you want to combine them in. If you would like to combine them vertically, or stack the rows on top of each other, you can use `rbind` or *row bind*. `rbind` is helpful if you have two dataframes with the same columns, and you want to combine the cases (rows). However, it will not work if the columns are different. `rbind` accepts an arbitrary number of dataframes, here we use two: `upper_rbind_df` and `lower_rbind_df`.
 
-```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well using the cbind function", echo = FALSE}
-knitr::include_graphics("./img/1_1_cbind.png")
+```{r, eval=FALSE}
+outcome = rbind(upper_rbind_df, lower_rbind_df) 
 ```
 
-Let's try it ourselves. Let's use `cbind` to merge the `e1_cbind` and `e2_cbind` dataframes together into a new `e3_cbind` dataframe. the `cbind` function takes an arbitrary number of dataframes as it's main arguments. We'll provide just our two here, but repeating one multiple times if you would like to see what happens.
-
-```{r}
-# cbind the dataframes
-e3_cbind = cbind(e1_cbind, e2_cbind)
-
-# preview output
-e3_cbind
+```{r, fig.cap="`rbind` example 1", fig.alt="Two dataframes that merge well bertically using the rbind function", echo = FALSE}
+knitr::include_graphics("./img/1_1_rbind.png")
 ```
 
-We can see out new `e3_cbind` dataframe was created as expected. This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
+## Join Horizontally using `cbind`
+
+If you would like to combine two dataframes horizontally, so that you add more columns on to a dataframe, you can use `cbind` or *column bind*. The `cbind` function takes an arbitrary number of dataframes as it's arguments. We'll provide just our two here, but try repeating one multiple times if you would like to see what happens.
+
+```{r, eval=FALSE}
+outcome = cbind(left_cbind_df, right_cbind_df) 
+```
+
+```{r, fig.cap="`cbind` example 1", fig.alt="Two dataframes that merge well horizontally using the cbind function", echo = FALSE}
+knitr::include_graphics("./img/1_2_cbind.png")
+```
+
+We can see out new `outcome` dataframe was created as expected. This method can work, but you must be very confident about the structure of your data. For example, in the following figure, what issues do you expect to run into with this method?
 
 ```{r, fig.cap = "`cbind` example 2", fig.alt = "Two dataframes with misaligned data", echo = FALSE}
-knitr::include_graphics("./img/1_2_cbind.png")
+knitr::include_graphics("./img/1_3_cbind.png")
 ```
 
 ## Joins using `merge`
@@ -143,20 +154,14 @@ An *inner join* tries to join two sets of data using a common *key*, keeping onl
 knitr::include_graphics("./img/2_1_inner.png")
 ```
 
-In the context of our data, it might look something like the following if we use hometown as our key:
+In the context of our data, it might look something like the following if we use hometown as our key. We can use the following code to do an *inner merge* using the `merge` function. The `merge` function in R requires two arguments, `x` and `y`, which are the dataframes we would like to merge. We will be using `left_merge_df` and `right_merge_df`, and asking merge to use `hometown` as the key to merge by.
+
+```{r, eval=FALSE}
+outcome = merge(x = left_merge_df, y = right_merge_df, by = "hometown") 
+```
 
 ```{r, fig.cap = "Inner Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, removing cases where there is no hometown match", echo = FALSE}
 knitr::include_graphics("./img/2_2_inner.png")
-```
-
-Let's try it ourselves. We can use the following code to do an *inner merge* using the `merge` function. The `merge` function in R requires two arguments, `x` and `y`, which are the dataframes we would like to merge. We will be using `e1_key` and `e2_key`, and asking merge to use `hometown` as the key to merge by. We'll assign our output to a new dataframe, `e3_inner`.
-
-```{r}
-# inner join using "hometown"
-e3_inner = merge(x = e1_key, y = e2_key, by = "hometown")
-
-# preview output
-e3_inner
 ```
 
 Everything seems in order. We can see that when using an *inner join*, cases where **both** dataframes have a single row with our key will be matched and joined into a single output dataframe. However, if there are rows in **either** data frame without a match, those rows will be dropped from our data.
@@ -169,20 +174,14 @@ An *Outer Join* is the opposite of an *inner join*. Rather than just looking for
 knitr::include_graphics("./img/3_1_outer.png")
 ```
 
-In the context of our data, an *outer join* may look something like the following, again using hometown as our key:
+In the context of our data, an *outer join* may look something like the following, again using hometown as our key. The code for an *outer join* is similar to an *inner join*, with one addition. We will want to specify that `all = TRUE`, essentially saying we want everything included.
+
+```{r, eval=FALSE}
+outcome = merge(x = left_merge_df, y = right_merge_df, by = "hometown", all = TRUE)
+```
 
 ```{r, fig.cap = "Outer Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, adding rows for cases with no matches, but introducing NAs", echo = FALSE}
 knitr::include_graphics("./img/3_2_outer.png")
-```
-
-Let's try it. The code for an *outer join* is similar to an *inner join*, with one addition. We will want to specify that `all = TRUE`, essentially saying we want everything included. let's assign our output to `e3_outer`.
-
-```{r}
-# inner join using "hometown"
-e3_outer = merge(x = e1_key, y = e2_key, by = "hometown", all = TRUE)
-
-# preview output
-e3_outer
 ```
 
 In this example, we see that an *outer join* will keep all available cases, but we introduce `NA` values into the resulting dataframe where no match could be made. This may or may not be an issue depending on what your next steps are.
@@ -195,20 +194,14 @@ A *left join* allows you to pick one of the two dataframes you are joining and p
 knitr::include_graphics("./img/4_1_left.png")
 ```
 
-Using our example data, a *left join* would look like this:
+Using our example data, a *left join* would look like this. The R code is similar, to the previous examples, but we specify that instead of `all = TRUE`, we just want `all.x = TRUE`. Recall that in the function call, `x` is the first dataframe, or the "left" one.
+
+```{r, eval=FALSE}
+outcome = merge(x = left_merge_df, y = right_merge_df, by = "hometown", all.x = TRUE) 
+```
 
 ```{r, fig.cap = "Left Join - Example Data", fig.alt = "Two dataframes being joined by common hometowns, keeping all of the left dataframe data, and adding the right dataframe data when available", echo = FALSE}
 knitr::include_graphics("./img/4_2_left.png")
-```
-
-The R code is similar, to the previous examples, but we specify that instead of `all = TRUE`, we just want `all.x = TRUE`. Recall that in the function call, `x` is the first dataframe, or the "left" one. We'll assign this output to `e3_left`.
-
-```{r}
-# inner join using "hometown"
-e3_left = merge(x = e1_key, y = e2_key, by = "hometown", all.x = TRUE)
-
-# preview output
-e3_left
 ```
 
 We can see that while all of the data from our 'left' side is preserved, unmatched data on the 'right' is discarded. You can also technically do a *right join*, which will do the same thing with sides reversed, but moving your prioritized data set to the left is more common.
@@ -230,11 +223,11 @@ rm(e1_cbind, e2_cbind, e3_cbind, e1_key, e2_key, e3_inner, e3_outer, e3_left)
 
 # Key Selection
 
-Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let's glance back at our `desert` and `swamp` dataframes to get an idea of what we're working with.
+Now that we have a few possible tools, we can start considering how we are going to join our duos back together. Let's glance back at our `california` and `massachusetts` dataframes to get an idea of what we're working with.
 
 ```{r}
-head(desert, 10)
-head(swamp, 10)
+head(california, 10)
+head(massachusetts, 10)
 ```
 
 In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the *key* based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.
@@ -276,22 +269,22 @@ We need to make our hometowns exact between out duos to use them as a key. To do
 
 While we could spend time making sure all of our hometowns are properly capitalized, it isn't really necessary in this application; we just need them to match. An easy way to do that is to set everything to upper or lower case. Let's use lower case here, making use of the `tolower` function in R. It will convert any character vector into all lower case.
 
-First for the desert:
+First for the california:
 
 ```{r}
-desert$hometown = tolower(desert$hometown)
+california$hometown = tolower(california$hometown)
 ```
 
-And then the swamp:
+And then the massachusetts:
 
 ```{r}
-swamp$hometown = tolower(swamp$hometown)
+massachusetts$hometown = tolower(massachusetts$hometown)
 ```
 
 Let's pause to look at our work ...
 
 ```{r}
-head(desert, 10)
+head(california, 10)
 ```
 
 Looks good. Now let's deal with the spacing. If you look at our dataframes and compare across them, you'll notice some hometowns have underscores in them. This seems to only happen when there would be a space. We can use that rule to replace all the underscores with a space instead. To do this, we'll use a `gsub` function, or "global substitution." It will look over all of the strings, and globally replace a pattern we specify with a substitution. In this case, we want to replace all "_" with " ".
@@ -301,19 +294,19 @@ Looks good. Now let's deal with the spacing. If you look at our dataframes and c
 # pattern is what we want to replace
 # replacement is what we want to replace the pattern
 # X is the vector of character strings we want to run this replacement on
-desert$hometown = gsub(pattern = "_", replacement =  " ", x = desert$hometown)
+california$hometown = gsub(pattern = "_", replacement =  " ", x = california$hometown)
 ```
 
-And now the swamp:
+And now the massachusetts:
 
 ```{r}
-swamp$hometown = gsub(pattern = "_", replacement = " ", x = swamp$hometown)
+massachusetts$hometown = gsub(pattern = "_", replacement = " ", x = massachusetts$hometown)
 ```
 
 Let's check our work ...
 
 ```{r}
-head(desert, 10)
+head(california, 10)
 ```
 
 Looking good! It seems we have a consistent key. Now for the ultimate task of reuniting our duos.
@@ -356,7 +349,7 @@ First, I'll combine all my individuals. You can add on rows to a dataframe using
 
 ```{r}
 # combine all out individuals into one dataframe
-individuals = rbind(swamp, desert)
+individuals = rbind(massachusetts, california)
 ```
 
 Now all of our individuals are in a single dataframe. Our next task is to split them evenly, so one member of each duo, by hometown, is in a separate dataframe. For this we can make use of the `duplicated` function. `duplicated` checks if a specific value has appeared already within a vector. For example, if you had a vector of `c("A", "B", "B", "C", "D", "C")`, the second B and second C would be considered duplicated, and thus output `TRUE` while all other values would output `FALSE`.
