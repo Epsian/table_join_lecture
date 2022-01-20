@@ -38,12 +38,10 @@ By the end of this lecture, I want you to be able to:
 
 **Roadmap**
 
-1. Example introduction.
-2. Data exploration and problem formulation.
-3. Merge toolkit.
-4. Example problem.
-5. Break and reflection.
-6. Real-world application.
+1. Learn the most common tools to join tables in R.
+2. Generate and explore example data.
+3. Work through example problem.
+4. Formulate a plan for merging real-world data.
 
 # Tools for Joining Data
 
@@ -87,7 +85,7 @@ knitr::include_graphics("./img/1_3_cbind.png")
 
 ## Joins using `merge`
 
-`cbind` may work in some situations, but is very "brittle" -- or easy to break -- with any changes to the data. A more reliable method of merging makes use of a common *key* between two sources of data. The *key* can be anything, like a numerical ID or a string, but they must always be unique. Joins that use the key method will be familiar to anyone who has used SQL in the past, as they follow the same naming convention as in that language.
+`cbind` may work in some situations, but is very "brittle" -- or easy to break -- with any changes to the data. A more reliable method of merging makes use of a common *key* between two sources of data. Think of a *key* like a luggage tag on a suitcase: it's a small bit of information that clearly links to things, even if they are separated. In terms of data, a *key* can be anything, like a numerical ID or a string, but they must always be unique. Joins that use the key method will be familiar to anyone who has used SQL in the past, as they follow the same naming convention as in that language.
 
 ### Inner Join
 
@@ -351,7 +349,13 @@ individuals = rbind(massachusetts, california)
 
 Now all of our individuals are in a single dataframe. Our next task is to split them evenly, so one member of each duo, by hometown, is in a separate dataframe. For this we can make use of the `duplicated` function. `duplicated` checks if a specific value has appeared already within a vector. For example, if you had a vector of `c("A", "B", "B", "C", "D", "C")`, the second B and second C would be considered duplicated, and thus output `TRUE` while all other values would output `FALSE`.
 
-In our case, if we run duplicated over the `hometown` column for our individuals, and split the `TRUE` into one datafarme and `FALSE` into another, we should end up with two dataframes, each containing one individual from a hometown. Let's give it a try. First, let's see what it looks like when we run `duplicated`. We'll assign it to our individuals dataframe so it is easier to see.
+In our case, if we run duplicated over the `hometown` column for our individuals, and split the `TRUE` into one datafarme and `FALSE` into another, we should end up with two dataframes, each containing one individual from a hometown.
+
+```{r, fig.cap = "Split via `duplicated`", fig.alt = "Two dataframes being split based on the column 'duplicated'", echo = FALSE}
+knitr::include_graphics("./img/5_1_duplicated.png")
+```
+
+Let's give it a try. First, let's see what it looks like when we run `duplicated`. We'll assign it to our individuals dataframe so it is easier to see.
 
 ```{r}
 # run duplicated over hometowns and assign as a new column in our individuals dataframe
@@ -362,10 +366,6 @@ individuals
 ```
 
 Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! We can split them using the `duplicated` column we just made.
-
-```{r, fig.cap = "Split via `duplicated`", fig.alt = "Two dataframes being split based on the column 'duplicated'", echo = FALSE}
-knitr::include_graphics("./img/5_1_duplicated.png")
-```
 
 ```{r}
 # assign to a new duo1 dataframe, the contents of dataframe "individuals"
