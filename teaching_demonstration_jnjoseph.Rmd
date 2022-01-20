@@ -47,6 +47,8 @@ By the end of this lecture, I want you to be able to:
 
 Our goal today is to learn how to merge two tables, or dataframes, in R. There a number of different ways to do so, depending on what you want your final output to look like. Below, we will go through some of the most common methods to merge dataframes. 
 
+We will be using two mini dataframes as an example, each containing individuals from a iconic duo in media. Later on in the lecture we will be creating our own dataset of duos, so start thinking of your favorites!
+
 If you would like to test these dataframes within R yourself, you can run this code to get the dataframes used in the examples. The results will be identical to the figures.
 
 ```{r}
@@ -161,8 +163,8 @@ rm(outcome, upper_rbind_df, lower_rbind_df, left_cbind_df, right_cbind_df, left_
 
 Please use the Zoom reacts to respond. Green check is TRUE, red X is FALSE.
 
-1. `cbind` sorts rows before combining dataframes.
-2. An *outer join* of two dataframes of equal rows will produce an outcome with the same number of rows.
+1. `cbind` checks rows for matches before combining dataframes.
+2. An *outer join* of two dataframes with mismatched data will discard unmatched data.
 
 </div>
 
@@ -182,7 +184,7 @@ Please run the following code to download our class data, and prepare it for the
 
 ```{r}
 # Load in student survey csv
-.raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing", header = TRUE, stringsAsFactors = FALSE)
+raw_survey = read.csv("https://docs.google.com/spreadsheets/d/1E8ME8ldv8Pv4-saL-ZYHJckmVPNgcNd53LasYiW0jwU/export?format=csv&usp=sharing", header = TRUE, stringsAsFactors = FALSE)
 
 # Let loose the data gremlins
 # Don't look at this file until after lecture! Here there be spoilers.
@@ -223,7 +225,7 @@ knitr::include_graphics("./img/0_1_output.png")
 
 **Checkpoint**
 
-1. Considering our desired output, do you have any thoughts regarding how we can join these dataframes?
+1. Considering our desired output, do you have any thoughts regarding how we can join these dataframes? Take 30 seconds and write down your ideas, then we will share in chat.
 2. What, if any, manipulations do you think we will need to perform before we can try and merge the data?
 
 </div>
@@ -235,6 +237,8 @@ knitr::include_graphics("./img/0_1_output.png")
 In order to join these dataframes and reunite our duos, we need to choose some method to match on. For this activity, we will be using one of the *key* based methods we covered above. However, data is rarely in a clean and usable state from the start. Often the bulk of your time will be spent preparing the data to do the actual task you want to accomplish.
 
 For our example, we will be using the "hometown" as our matching *key*; we ultimately want all of our duos to get home! However, the data gremlins have made this task more difficult, as the hometowns have various noise in them that prevents us from using them as a *key*. We're going to have to repair the damage before we can reunite our duos.
+
+I'll walk you through one method below, but stress that this is not an "optimal" answer, it is just one of many.
 
 ---
 
@@ -312,7 +316,7 @@ Unfortunately, our duos were not split evenly. Some duos both got sent to the sa
 
 **Checkpoint**
 
-1. How would you prepare our dataframes for a clean merge, now that we have a good key?
+1. Now that we have a good key, what kind of merge would you use to reunite our duos?
 
 </div>
 
@@ -338,56 +342,13 @@ Don't scroll past here until you've answered the above questions!
 <br>
 <br>
 
-I'll walk you through one method, but stress that this is not an "optimal" answer, it is just one of many. For my solution, I will aggregate all of the individuals into one dataframe, and then split them so that each new dataframe has only one instance of each hometown.
-
-First, I'll combine all my individuals using `rbind` from earlier.
-
-```{r}
-# combine all out individuals into one dataframe
-individuals = rbind(massachusetts, california)
-```
-
-Now all of our individuals are in a single dataframe. Our next task is to split them evenly, so one member of each duo, by hometown, is in a separate dataframe. For this we can make use of the `duplicated` function. `duplicated` checks if a specific value has appeared already within a vector. For example, if you had a vector of `c("A", "B", "B", "C", "D", "C")`, the second B and second C would be considered duplicated, and thus output `TRUE` while all other values would output `FALSE`.
-
-In our case, if we run duplicated over the `hometown` column for our individuals, and split the `TRUE` into one datafarme and `FALSE` into another, we should end up with two dataframes, each containing one individual from a hometown.
-
-```{r, fig.cap = "Split via `duplicated`", fig.alt = "Two dataframes being split based on the column 'duplicated'", echo = FALSE}
-knitr::include_graphics("./img/5_1_duplicated.png")
-```
-
-Let's give it a try. First, let's see what it looks like when we run `duplicated`. We'll assign it to our individuals dataframe so it is easier to see.
-
-```{r}
-# run duplicated over hometowns and assign as a new column in our individuals dataframe
-individuals$duplicated = duplicated(individuals$hometown)
-
-# show the dataframe
-individuals
-```
-
-Looks good! Now we can use that new column to evenly split our dataframe, and them cleanly pair our duos back together! We can split them using the `duplicated` column we just made.
-
-```{r}
-# assign to a new duo1 dataframe, the contents of dataframe "individuals"
-# SUCH THAT
-# the rows whose value in column `individuals$duplicated` is equal to TRUE
-# and give me all columns
-duo1 = individuals[individuals$duplicated == TRUE, ]
-
-# assign to a new duo1 dataframe, the contents of dataframe "individuals"
-# SUCH THAT
-# the rows whose value in column `individuals$duplicated` is equal to TRUE
-# and give me all columns
-duo2 = individuals[individuals$duplicated == FALSE, ]
-```
-
 Alright, now we have two dataframes, each containing one member of a duo. Time to finally merge them back together! We can do this using the `merge` function we learned about previously. Let's try an *inner merge*.
 
 ```{r}
 # assign to a new reunion dataframe
 # the result of a inner merge between dataframes `duo1` and `duo2`
 # using column "hometown" as the key
-reunion = merge(duo1, duo2, by = "hometown")
+reunion = merge(california, massachusetts, by = "hometown")
 
 # show results
 reunion
